@@ -41,7 +41,7 @@
         $result = mysqli_query($conn, $sql);
         $inc = mysqli_fetch_array($result, MYSQLI_NUM);
         $inc[$total] ++;
-        $sql = "UPDATE pageviewcount SET $total = $inc[$total], user_timestamp = '$timestamp' WHERE user_ip = UNKNOWN";
+        $sql = "UPDATE pageviewcount SET $total = $inc[$total], $timestamp = '$timestamp' WHERE user_ip = UNKNOWN";
         mysqli_query($conn, $sql);
       } else {
 
@@ -67,7 +67,7 @@
             echo '<br>Registered hit add and timestamp update';
             $totalViews++;
             $registeredViews++;
-            $sql = "UPDATE pageviewcount SET $timestamp = '$currentTime', $total = '$totalViews', $registered = '$registeredViews' WHERE user_ip = INET_ATON('$ipaddress')";
+            $sql = "UPDATE pageviewcount SET user_timestamp = '$currentTime', $timestamp = '$currentTime', $total = '$totalViews', $registered = '$registeredViews' WHERE user_ip = INET_ATON('$ipaddress')";
             mysqli_query($conn, $sql);
 
           } else {
@@ -76,7 +76,7 @@
 
             echo '<br>total hit add';
             $totalViews++;
-            $sql = "UPDATE pageviewcount SET $total = $totalViews WHERE user_ip = INET_ATON('$ipaddress')";
+            $sql = "UPDATE pageviewcount SET user_timestamp = '$currentTime', $total = $totalViews WHERE user_ip = INET_ATON('$ipaddress')";
             mysqli_query($conn, $sql);
 
           }
@@ -84,7 +84,7 @@
 
           //Add new user to DB and log registered hit
           echo '<br>add new user with total and registered hit';
-          $sql = "INSERT INTO pageviewcount (user_id, user_ip, $timestamp, $total, $registered) VALUES (null, INET_ATON('$ipaddress'), '$currentTime', 1, 1)";
+          $sql = "INSERT INTO pageviewcount (user_id, user_ip, user_timestamp, $timestamp, $total, $registered) VALUES (null, INET_ATON('$ipaddress'), '$currentTime', '$currentTime', 1, 1)";
           mysqli_query($conn, $sql);
 
         }
