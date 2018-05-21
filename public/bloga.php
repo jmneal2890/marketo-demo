@@ -9,6 +9,6 @@
   </body>
   <?php
     include 'components/counterin.php';
-    countin(blog_a);
+    countin(bloga);
    ?>
 </html>

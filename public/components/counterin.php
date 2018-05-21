@@ -4,8 +4,15 @@
       //Call DB handler
       include 'dbh.inc.php';
 
+      //establish page variables
+      $total = $page . '_total';
+      $registered = $page . '_registered';
+
       //Set timestamp for current visit
       $currentTime = date("Y-m-d H:i:s");
+      echo '<br>'.$currentTime;
+      echo '<br>'.strtotime($currentTime);
+      echo '<br>'.strtotime('-12 hours');
 
       //Pull visitor IP
       $ipaddress = '';
@@ -24,50 +31,78 @@
       } else {
         $ipaddress = 'UNKNOWN';
       }
+      $ipaddress = '192.168.1.1';
+      echo '<br>'.$ipaddress;
 
       //Check if IP address is valid
       if ($ipaddress == 'UNKNOWN') {
 
         //Tick up internal counter of UNKNOWN IP
-        $sql = "SELECT user_ip FROM pageviewcount WHERE user_ip=UNKNOWN";
+        $sql = "SELECT user_ip FROM pageviewcount WHERE user_ip=UNKNOWN;";
         $result = mysqli_query($conn, $sql);
         $inc = mysqli_fetch_array($result, MYSQLI_NUM);
-        $inc[0] ++;
-        $sql = "UPDATE pageviewcount SET $page" . "_total = ($inc[0]), user_timestamp = $currentVisit WHERE user_ip = UNKNOWN";
-        $update = mysqli_query($conn, $sql);
+        $inc[$total] ++;
+        $sql = "UPDATE pageviewcount SET $total = $inc[$total], user_timestamp = $currentVisit WHERE user_ip = UNKNOWN;";
+        mysqli_query($conn, $sql);
+        mysqli_close($conn);
       } else {
 
         //Check user IP is registered in DB
-        $sql = "SELECT * FROM pageviewcount WHERE user_ip=$ipaddress";
+        echo '<br>IP register check';
+        $sql = "SELECT * FROM pageviewcount WHERE user_ip=INET_ATON('$ipaddress');";
         $results = mysqli_query($conn, $sql);
-        $data = mysqli_fetch_array($results);
-        echo $data[1];
         foreach ($results as $row) {
           $userIp = $row['user_ip'];
+          echo '<br>'.$userIp;
           $userTimestamp = $row['user_timestamp'];
-          $totalViews = $row[$page.'_total'];
-          $registeredViews = $row[$page.'_registered'];
+          echo '<br>'.$userTimestamp;
+          echo '<br>'.strtotime($userTimestamp);
+          $totalViews = $row[$total];
+          echo '<br>'.$totalViews;
+          $registeredViews = $row[$registered];
+          echo '<br>'.$registeredViews;
         }
-        if ($userIp !== null) {
+        mysqli_close($conn);
+
+        if ($userIp != '') {
 
           //Check if most recent registered timestamp against $currentVisit
-          if ($userTimestamp +12 > $currentTime) {
+          echo '<br>Timestamp check';
+          if (strtotime($userTimestamp) >= strtotime('-12 hours')) {
 
             //Add registered hit and total hit to approriate column, update user_timestamp
+            echo '<br>Registered hit add and timestamp update';
             $totalViews++;
+            echo '<br>'.$totalViews;
             $registeredViews++;
-            $sql = "UPDATE pageviewcount SET user_timestamp = $userTimestamp, $page"."_total = $totalViews, $page"."_registered = $registeredViews WHERE user_ip = $ipaddress";
-            $update = mysqli_query($conn, $sql);
+            echo '<br>'.$registeredViews;
+            $sql = "UPDATE pageviewcount SET user_timestamp = $currentTime, $total = $totalViews, $registered = $registeredViews WHERE user_ip=INET_ATON('$ipaddress');";
+            mysqli_query($conn, $sql);
+            mysqli_close($conn);
           } else {
 
             //Add total hit to appropriate column
-            $sql = "UPDATE pageviewcount SET $page";
+            echo '<br>total hit add';
+            $totalViews++;
+            $sql = "UPDATE pageviewcount SET $total=$totalViews WHERE user_ip=INET_ATON('$ipaddress');";
+            mysqli_query($conn, $sql);
+            mysqli_close($conn);
           }
         } else {
+          include 'dbh.inc.php';
 
           //Add new user to DB and log registered hit
-          $sql = "INSERT INTO pageviewcount VALUES (null, $ipaddress, $currentTime, )";
-
+          echo '<br>add new user and registered hit add';
+          $sql = "INSERT INTO pageviewcount (user_id, user_ip, user_timestamp, $total, $registered) VALUES (null, INET_ATON('$ipaddress'), $currentTime, 1, 1);";
+          echo '<br>'.$sql;
+          if (mysqli_query($conn, $sql)) {
+            echo "new record added";
+          } else {
+            echo "There was an issue";
+          }
+          //mysqli_query($conn, $sql);
+          mysqli_close($conn);
+          echo '<br> tried inserting';
         }
       }
     }
