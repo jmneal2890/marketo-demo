@@ -7,13 +7,17 @@ May have to run twice to get sql server running properly, not just excited.
 Have not set up persistent data with sql server, so have to build new database when new docker container is built.
 
 - Bash into mysql command line
-`docker exec -it marketo-demo_mysql_1`<br>
-`mysql -p`<br>
+
+`docker exec -it marketo-demo_mysql_1`
+
+`mysql -p`
+
 `password: surfpaso`
 
 - Build proper database table for hit counter to register to. Currently set up for two pages, easily expandable to more.
 
 `USE marketo_demo;`
+
 `CREATE TABLE pageviewcount (user_id int(11) not null AUTO_INCREMENT primary key, user_ip varchar(255), user_timestamp datetime, bloga_timestamp datetime, bloga_total int(11), bloga_registered int(11), blogb_timestamp datetime, blogb_total int(11), blogb_registered int(11));`
 
 - In order for 'UNKNOWN' IP counter to work, initial entry must be created:
@@ -21,6 +25,7 @@ Have not set up persistent data with sql server, so have to build new database w
 `INSERT INTO pageviewcount (user_id, user_ip, user_timestamp, bloga_timestamp, bloga_total, bloga_registered, blogb_timestamp, blogb_total, blogb_registered) VALUES (null, 'UNKNOWN', null, null, 0, 0, null, 0, 0);`
 
 - Should now be able to check current entries in user database and track their page views.
+
 `SELECT * FROM pageviewcount;`
 
 - Current logic is set to:
@@ -36,4 +41,5 @@ Have not set up persistent data with sql server, so have to build new database w
   6. If User is not registered, create new entry in database with users IP, current time as new global user_timestamp, current time as current blog page timestamp, add 1 total hit count to current blog page, add 1 registered hit to current blog page.
 
 - To expand table for more blog styles, simply add new columns to DB
+
 `ALTER TABLE pageviewcount ADD COLUMN ([new blog title]_timestamp datetime, [new blog title]_total int(11), [new blog title]_registered int(11));`
