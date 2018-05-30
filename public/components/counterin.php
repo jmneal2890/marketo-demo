@@ -31,18 +31,25 @@
       }
 
       //IP manipulation for testing
-      //$ipaddress = '192.168.1.5';
+      //$ipaddress = 'UNKNOWN';
+      //$ipaddress = '192.129.2.9';
 
       //Check if IP address is valid
       if ($ipaddress == 'UNKNOWN') {
 
         //Tick up internal counter of UNKNOWN IP
-        $sql = "SELECT user_ip FROM pageviewcount WHERE user_ip=UNKNOWN";
-        $result = mysqli_query($conn, $sql);
-        $inc = mysqli_fetch_array($result, MYSQLI_NUM);
-        $inc[$total] ++;
-        $sql = "UPDATE pageviewcount SET $total = $inc[$total], $timestamp = '$timestamp' WHERE user_ip = UNKNOWN";
+        echo '<br>update UNKNOWN ip counter';
+        $sql = "SELECT * FROM pageviewcount WHERE user_ip='UNKNOWN'";
+        $results = mysqli_query($conn, $sql);
+        foreach ($results as $row) {
+          $userTimestamp = $row[$timestamp];
+          $totalViews = $row[$total];
+          $registeredViews = $row[$registered];
+        }
+        $totalViews++;
+        $sql = "UPDATE pageviewcount SET $total = $totalViews, $timestamp = '$currentTime', user_timestamp = '$currentTime' WHERE user_ip = 'UNKNOWN'";
         mysqli_query($conn, $sql);
+
       } else {
 
         //Check user IP is registered in DB
@@ -84,7 +91,7 @@
 
           //Add new user to DB and log registered hit
           echo '<br>add new user with total and registered hit';
-          $sql = "INSERT INTO pageviewcount (user_id, user_ip, user_timestamp, $timestamp, $total, $registered) VALUES (null, INET_ATON('$ipaddress'), '$currentTime', '$currentTime', 1, 1)";
+          $sql = "INSERT INTO pageviewcount (user_ip, user_timestamp, $timestamp, $total, $registered) VALUES (INET_ATON('$ipaddress'), '$currentTime', '$currentTime', 1, 1)";
           mysqli_query($conn, $sql);
 
         }
