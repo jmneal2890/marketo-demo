@@ -7,8 +7,8 @@ May have to run twice to get sql server running properly, not just excited.
 Have not set up persistent data with sql server, so have to build new database when new docker container is built.
 
 - Bash into mysql command line
-`docker exec -it marketo-demo_mysql_1`
-`mysql -p`
+`docker exec -it marketo-demo_mysql_1`<br>
+`mysql -p`<br>
 `password: surfpaso`
 
 - Build proper database table for hit counter to register to. Currently set up for two pages, easily expandable to more.
