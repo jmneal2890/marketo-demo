@@ -16,7 +16,7 @@ services:
       DB_HOST: mysql
       DB_DATABASE: marketo_demo
       DB_USERNAME: root
-      DB_PASSWORD: surfpaso
+      DB_PASSWORD: password
       REDIS_HOST: redis
       SESSION_DRIVER: redis
       CACHE_DRIVE: redis
@@ -27,8 +27,8 @@ services:
     environment:
       MYSQL_DATABASE: marketo_demo
       MYSQL_USER: root
-      MYSQL_PASSWORD: surfpaso
-      MYSQL_ROOT_PASSWORD: surfpaso
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
   redis:
     image: redis:4.0-alpine
     ports:
