@@ -8,7 +8,7 @@ Have not set up persistent data with sql server, so have to build new database w
 
 - Bash into mysql command line
 
-`docker exec -it marketo-demo_mysql_1`
+`docker exec -it marketo-demo_mysql_1 bash`
 
 `mysql -p`
 
