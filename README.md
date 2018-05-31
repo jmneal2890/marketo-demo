@@ -42,4 +42,4 @@ Have not set up persistent data with sql server, so have to build new database w
 
 - To expand table for more blog styles, simply add new columns to DB
 
-`ALTER TABLE pageviewcount ADD COLUMN ([new blog title]_timestamp datetime, [new blog title]_total int(11), [new blog title]_registered int(11));`
+`ALTER TABLE pageviewcount ADD COLUMN ([new blog title]_timestamp datetime, [new blog title]_total int(11) default 0, [new blog title]_registered int(11) default 0);`
