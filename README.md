@@ -18,7 +18,7 @@ Have not set up persistent data with sql server, so have to build new database w
 
 `USE marketo_demo;`
 
-`CREATE TABLE pageviewcount (user_id int(11) not null AUTO_INCREMENT primary key, user_ip varchar(255), user_timestamp datetime, bloga_timestamp datetime, bloga_total int(11), bloga_registered int(11), blogb_timestamp datetime, blogb_total int(11), blogb_registered int(11));`
+`CREATE TABLE pageviewcount2 (user_id int(11) not null AUTO_INCREMENT primary key, user_ip varchar(255), user_timestamp datetime, bloga_timestamp datetime, bloga_total int(11) default 0, bloga_registered int(11) default 0, blogb_timestamp datetime, blogb_total int(11) default 0, blogb_registered int(11) default 0);`
 
 - In order for 'UNKNOWN' IP counter to work, initial entry must be created:
 
