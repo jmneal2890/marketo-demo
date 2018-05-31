@@ -12,7 +12,7 @@ Have not set up persistent data with sql server, so have to build new database w
 
 `mysql -p`
 
-`password: password`
+`password: demo`
 
 - Build proper database table for hit counter to register to. Currently set up for two pages, easily expandable to more.
 

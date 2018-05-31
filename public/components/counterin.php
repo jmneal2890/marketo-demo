@@ -31,8 +31,8 @@
       }
 
       //IP manipulation for testing
-      //$ipaddress = 'UNKNOWN';
-      //$ipaddress = '192.129.2.9';
+        //$ipaddress = 'UNKNOWN';
+        //$ipaddress = '192.129.2.8';
 
       //Check if IP address is valid
       if ($ipaddress == 'UNKNOWN') {
@@ -42,7 +42,6 @@
         $sql = "SELECT * FROM pageviewcount WHERE user_ip='UNKNOWN'";
         $results = mysqli_query($conn, $sql);
         foreach ($results as $row) {
-          $userTimestamp = $row[$timestamp];
           $totalViews = $row[$total];
           $registeredViews = $row[$registered];
         }
@@ -74,7 +73,7 @@
             echo '<br>Registered hit add and timestamp update';
             $totalViews++;
             $registeredViews++;
-            $sql = "UPDATE pageviewcount SET user_timestamp = '$currentTime', $timestamp = '$currentTime', $total = '$totalViews', $registered = '$registeredViews' WHERE user_ip = INET_ATON('$ipaddress')";
+            $sql = "UPDATE pageviewcount SET user_timestamp = '$currentTime', $timestamp = '$currentTime', $total = $totalViews, $registered = $registeredViews WHERE user_ip = INET_ATON('$ipaddress')";
             mysqli_query($conn, $sql);
 
           } else {
